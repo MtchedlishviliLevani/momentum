@@ -1,8 +1,14 @@
+import { Outlet } from "react-router"
+
 function App() {
 
   return (
     <>
-      nknk
+      <header>header</header>
+      <main>
+        <Outlet />
+      </main>
+
     </>
   )
 }
