@@ -1,4 +1,4 @@
-import Button from "../Button/Button"
+import Button from "../UI/Button"
 
 function Header({ onOpenModal }: { onOpenModal: () => void }) {
     return (
