@@ -58,3 +58,63 @@ export async function getDepartments() {
     throw error;
   }
 }
+
+/// Get statuses
+
+export async function getStatuses() {
+  try {
+    const response = await api.get("/statuses");
+    return response.data;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    } else {
+      throw new Error(String(error));
+    }
+  }
+}
+
+/// Get prioritaties
+export async function getPriorities() {
+  try {
+    const response = await api.get("/priorities");
+    return response.data;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    } else {
+      throw new Error(String(error));
+    }
+  }
+}
+
+/// POST create task
+
+export async function createTask(formData: UseFormValues) {
+  try {
+    const response = await api.post("/tasks", formData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    } else {
+      throw new Error(String(error));
+    }
+  }
+}
+
+/// Get tasks
+export async function getTasks() {
+  try {
+    const response = await api.get("/tasks");
+    return response.data;
+  } catch (error: unknown) {
+    const message =
+      error instanceof Error ? error.message : "An unknown error occurred";
+    throw new Error(message);
+  }
+}
