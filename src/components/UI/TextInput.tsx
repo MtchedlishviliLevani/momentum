@@ -17,7 +17,7 @@ const TextInput: React.FC<TextInputProps> = ({
 
             type={type}
             placeholder={placeholder}
-            className={`w-full  p-[10px]  border-[1px] border-[#CED4DA]  rounded-[6px] text-[16px]   outline-none  ${errorBorder} ${className}`}
+            className={`w-full  p-[10px]  border-[1px] border-[#CED4DA] text-[#0D0F10]  rounded-[6px] text-[14px]   outline-none  ${errorBorder} ${className}`}
             {...register(name, validation)}
         />
     );
