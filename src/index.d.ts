@@ -80,3 +80,77 @@ interface FormDataValues {
   department_id: string;
   avatar?: FileList;
 }
+
+/// create-task-page
+
+interface UseFormValues {
+  name: string;
+  description: string;
+  status_id: number;
+  employee_id: number | null;
+  priority_id: number | null;
+  department_id: number;
+  due_date: string;
+}
+
+/// EmploySection
+interface Employee {
+  id: number;
+  name: string;
+  surname: string;
+  avatar: string;
+}
+
+interface EmployeSectionProps {
+  control: Control<UseFormValues>;
+  employees: Employee[];
+  filteredPeople: Employee[];
+  watch: UseFormWatch<UseFormValues>;
+}
+
+//// Prioritety Section
+interface Priority {
+  id: number;
+  name: string;
+  icon: string;
+}
+interface PrioritySectionProps {
+  control: Control<UseFormValues>;
+  priorities: Priority[];
+  setValue: UseFormSetValue<UseFormValues>;
+}
+
+/// StatusSection
+type Status = {
+  id: number;
+  name: string;
+};
+
+interface StatusProps {
+  control: Control<UseFormValues>;
+  statuses: Status[];
+}
+
+//// Department section
+interface Department {
+  id: number;
+  name: string;
+}
+interface DepartmentSelectorProps {
+  control: Control<UseFormValues>;
+  departments: Department[];
+  setValue: UseFormSetValue<UseFormValues>;
+}
+
+// Title Section
+interface TitleSectionProps {
+  register: UseFormRegister<UseFormValues>;
+  watch: UseFormWatch<UseFormValues>;
+}
+
+/// Description
+interface DescriptionSectionProps {
+  register: UseFormRegister<UseFormValues>;
+  watch: UseFormWatch<UseFormValues>;
+  errors: FieldErrors<UseFormValues>;
+}
