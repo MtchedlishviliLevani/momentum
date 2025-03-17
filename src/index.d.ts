@@ -154,3 +154,84 @@ interface DescriptionSectionProps {
   watch: UseFormWatch<UseFormValues>;
   errors: FieldErrors<UseFormValues>;
 }
+
+/// home
+type Department = {
+  id: number;
+  name: string;
+};
+
+type Priority = {
+  id: number;
+  name: string;
+  icon: string;
+};
+
+type Status = {
+  id: number;
+  name: string;
+};
+
+type Employee = {
+  id: number;
+  name: string;
+  surname: string;
+  avatar: string;
+  department: Department;
+};
+
+type Task = {
+  id: number;
+  name: string;
+  description: string;
+  due_date: string; // or Date if you plan to convert it
+  department: Department;
+  employee: Employee;
+  priority: Priority;
+  status: Status;
+  total_comments: number;
+};
+
+/// Homepage
+interface SelectedFiltersType {
+  departments: number[];
+  priorities: number[];
+  employees: number[];
+}
+
+/// filterBar
+type Item = {
+  id: number;
+  name: string;
+  surname?: string;
+};
+
+type FilterBarProps = {
+  title: string;
+  items: Item[];
+  selectedItems: number[];
+  onApply: (selected: number[]) => void;
+};
+
+//// Selected filters
+type FilterType = "departments" | "priorities" | "employees";
+
+type Department = { id: number; name: string };
+type Priority = { id: number; name: string };
+type Employee = { id: number; name: string; surname?: string };
+
+type SelectedFiltersProps = {
+  selectedFilters: Record<FilterType, number[]>;
+  departments: Department[];
+  priorities: Priority[];
+  employees: Employee[];
+  removeSelectedFilter: (type: FilterType, id: number) => void;
+  clearSelectedFilter: () => void;
+};
+
+// TaskColumn Comp
+type TaskColumnProps = {
+  status: Status;
+  tasks: Task[];
+  color: string;
+};
