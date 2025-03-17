@@ -10,8 +10,8 @@ const Button: React.FC<ButtonProps> = ({
     const base = 'flex items-center justify-center gap-[4px] transition-all duration-300 cursor-pointer';
 
     const variants: Record<Variant, string> = {
-        primary: 'bg-purple-600 text-white hover:bg-[#B588F4]',
-        outline: 'bg-white text-[#212529] border border-purple-600 hover:border-[#B588F4]',
+        primary: 'bg-[#8338EC] text-white hover:bg-[#B588F4]',
+        outline: 'bg-white text-[#212529] border border-[#8338EC] hover:border-[#B588F4]',
     };
     const sizes: Record<Size, string> = {
         default: 'text-[16px]',
