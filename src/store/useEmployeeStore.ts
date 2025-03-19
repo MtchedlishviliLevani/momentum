@@ -1,12 +1,23 @@
 import { create } from "zustand";
 import { getEmployees, createEmployeeApi } from "../services/index";
+import { produce } from "immer";
+interface Department {
+  id: number;
+  name: string;
+}
 
 interface Employee {
   id: number;
   name: string;
   surname: string;
   avatar: string;
-  department_id: number;
+  department: Department;
+}
+
+interface EmployeeState {
+  employees: Employee[];
+  fetchEmployees: () => Promise<void>;
+  createEmployee: (formData: FormData) => Promise<void>;
 }
 
 interface EmployeeState {
@@ -29,9 +40,11 @@ export const useEmployeeStore = create<EmployeeState>((set) => ({
   createEmployee: async (formData: FormData) => {
     try {
       const newEmployee = await createEmployeeApi(formData);
-      set((state) => ({
-        employees: [...state.employees, newEmployee],
-      }));
+      set(
+        produce((state) => {
+          state.employees.push(newEmployee);
+        })
+      );
     } catch (error) {
       console.error("Error creating employee:", error);
       throw error;
