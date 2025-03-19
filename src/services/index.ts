@@ -118,3 +118,52 @@ export async function getTasks() {
     throw new Error(message);
   }
 }
+
+/// get specific task
+export async function getTask(taskId: string): Promise<DetailTask> {
+  try {
+    const response = await api.get(`tasks/${taskId}`);
+    return response.data;
+  } catch (error) {
+    throw new Error(error instanceof Error ? error.message : "Unknown error");
+  }
+}
+
+/// PUT change status
+export async function changeStatus(id: number, statusId: number) {
+  try {
+    const response = await api.put(`tasks/${id}`, {
+      status_id: statusId,
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(error instanceof Error ? error.message : "Unknown error");
+  }
+}
+
+/// POST comment
+export async function addComment(
+  taskId: number,
+  text: string,
+  parentId: number | null = null
+) {
+  try {
+    const response = await api.post(`/tasks/${taskId}/comments`, {
+      text,
+      parent_id: parentId,
+    });
+
+    return response.data;
+  } catch (error) {
+    throw new Error(error instanceof Error ? error.message : "Unknown error");
+  }
+}
+
+export async function getComments(taskId: number) {
+  try {
+    const response = await api.get(`tasks/${taskId}/comments`);
+    return response.data;
+  } catch (error) {
+    throw new Error(error instanceof Error ? error.message : "Unknown error");
+  }
+}
