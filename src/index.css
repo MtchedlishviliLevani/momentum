@@ -27,3 +27,11 @@
   --font-firaGo: FiraGo, "sans-serif";
   --default-font-family: FiraGo, "sans-serif";
 }
+
+body {
+  width: 1980px;
+  padding-left: 120px;
+  padding-right: 120px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}

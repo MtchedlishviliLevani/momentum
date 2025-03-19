@@ -29,7 +29,6 @@ function CreateEmployee({ onCloseModal }: { onCloseModal: () => void }) {
     defaultValues: {
       name: "",
       surname: "",
-      department_id: ""
     }
   });
 
