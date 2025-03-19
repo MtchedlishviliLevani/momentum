@@ -184,7 +184,7 @@ type Task = {
   id: number;
   name: string;
   description: string;
-  due_date: string; // or Date if you plan to convert it
+  due_date: string;
   department: Department;
   employee: Employee;
   priority: Priority;
@@ -204,6 +204,7 @@ type Item = {
   id: number;
   name: string;
   surname?: string;
+  avatar?: string;
 };
 
 type FilterBarProps = {
@@ -211,9 +212,10 @@ type FilterBarProps = {
   items: Item[];
   selectedItems: number[];
   onApply: (selected: number[]) => void;
+  onToggle: () => void;
+  isOpen: boolean;
 };
 
-//// Selected filters
 type FilterType = "departments" | "priorities" | "employees";
 
 type Department = { id: number; name: string };
@@ -235,3 +237,38 @@ type TaskColumnProps = {
   tasks: Task[];
   color: string;
 };
+
+interface DetailTask {
+  id: number;
+  name: string;
+  description: string;
+  due_date: string;
+  department: Department;
+  description: string;
+  employee: {
+    id: number;
+    name: string;
+    avatar: string;
+  };
+  priority: Priority;
+  status: Status;
+}
+
+/// Comment section
+interface SubComment {
+  id: number;
+  text: string;
+  task_id: number;
+  parent_id: number;
+  author_avatar: string;
+  author_nickname: string;
+}
+interface Comment {
+  author_nickname: string;
+  id: number;
+  text: string;
+  task_id: number;
+  parent_id: number | null;
+  author_avatar: string;
+  sub_comments: SubComment[];
+}
