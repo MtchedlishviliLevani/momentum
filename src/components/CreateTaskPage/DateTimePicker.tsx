@@ -63,35 +63,88 @@ const DateTimePicker = ({ value = '', onChange }: DateTimePickerProps) => {
         const newValue = e.target.value;
         setInputValue(newValue);
 
-        // date validation DD/M/Y format
         const pattern = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
-        if (pattern.test(newValue) && newValue.length > 1) {
-            setValidationStates("Validated")
-        } else if (newValue.length === 0) {
-            setValidationStates("Initial")
-        } else {
-            setValidationStates("Invalidated")
-        }
-    };
 
+        if (!newValue || newValue.length === 0) {
+            setValidationStates("Initial");
+            return;
+        }
+
+        if (!pattern.test(newValue)) {
+            setValidationStates("Invalidated");
+            return;
+        }
+
+        const [day, month, year] = newValue.split("/").map(Number);
+
+        const inputDate = new Date(year, month - 1, day);
+
+        // Strict date validation: ensure the date components match what was input
+        const isValidDate =
+            inputDate.getFullYear() === year &&
+            inputDate.getMonth() + 1 === month &&
+            inputDate.getDate() === day;
+
+        if (!isValidDate) {
+            setValidationStates("Invalidated");
+            return;
+        }
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        if (inputDate < today) {
+            setValidationStates("Invalidated");
+        } else {
+            setValidationStates("Validated");
+        }
+
+        // Notify parent components (optional)
+        onChange?.(newValue);
+    };
 
     /// this code is needed because validation must be updated when select date with calendar and not only typping
     useEffect(() => {
         const pattern = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
-        if (pattern.test(inputValue) && inputValue.length > 1) {
-            setValidationStates("Validated")
-        } else if (inputValue.length === 0) {
-            setValidationStates("Initial")
-        } else {
-            setValidationStates("Invalidated")
+
+        if (!inputValue || inputValue.length === 0) {
+            setValidationStates("Initial");
+            return;
         }
-    }, [inputValue])
+
+        if (!pattern.test(inputValue)) {
+            setValidationStates("Invalidated");
+            return;
+        }
+
+        const [day, month, year] = inputValue.split("/").map(Number);
+
+        const inputDate = new Date(year, month - 1, day);
+        const isValidDate =
+            inputDate.getFullYear() === year &&
+            inputDate.getMonth() + 1 === month &&
+            inputDate.getDate() === day;
+
+        if (!isValidDate) {
+            setValidationStates("Invalidated");
+            return;
+        }
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        if (inputDate < today) {
+            setValidationStates("Invalidated");
+        } else {
+            setValidationStates("Validated");
+        }
+    }, [inputValue]);
+
 
     const handleIconClick = (e: React.MouseEvent<HTMLDivElement>) => {
         e.stopPropagation();
         toggleCalendar();
     };
-
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             const container = document.querySelector('.date-picker-container') as HTMLElement;
@@ -99,11 +152,9 @@ const DateTimePicker = ({ value = '', onChange }: DateTimePickerProps) => {
                 setShowCalendar(false);
             }
         };
-
         if (showCalendar) {
             document.addEventListener('mousedown', handleClickOutside);
         }
-
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
