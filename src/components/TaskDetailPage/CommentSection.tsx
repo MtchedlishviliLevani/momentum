@@ -109,7 +109,6 @@ function CommentSection({ task }: { task: DetailTask }) {
                                             <div onClick={() => handlingReply(comment?.id)} className="flex gap-[6px] items-center cursor-pointer"><img src="/svg/replyIcon.svg" alt="" /> <span className="text-[12px] text-[#8338ec]">უპასუხე</span></div>
                                         </div>
 
-                                        {/* Reply input box */}
                                         {activeReply === comment.id && (
                                             <div className="mt-[12px]">
                                                 <div className="relative">

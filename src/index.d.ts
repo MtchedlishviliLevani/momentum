@@ -77,7 +77,7 @@ interface FormValues {
 interface FormDataValues {
   name: string;
   surname: string;
-  department_id: string;
+  department_id: number | null | string;
   avatar?: FileList;
 }
 

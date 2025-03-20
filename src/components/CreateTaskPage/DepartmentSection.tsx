@@ -17,7 +17,7 @@ function DepartmentSection({ control, departments, setValue }: DepartmentSelecto
             <Controller
                 control={control}
                 name="department_id"
-                rules={{ required: "დეპარტამენტის არჩევა სავალდებულოა" }}
+                rules={{ required: true }}
                 render={({
                     field: { onChange, value },
                     fieldState: { error },
@@ -33,7 +33,7 @@ function DepartmentSection({ control, departments, setValue }: DepartmentSelecto
                                 onClick={toggleDropDown}
                             >
                                 <div
-                                    className={`flex justify-between items-center w-full p-[14px] border-[1px] border-[#CED4DA] rounded-[6px] ${isOpenDepartment ? "rounded-b-none border-b-0" : ""} text-[16px] outline-none`}
+                                    className={`flex ${error && "border-[#FA4D4D]"} justify-between items-center w-full p-[14px] border-[1px] border-[#CED4DA] rounded-[6px] ${isOpenDepartment ? "rounded-b-none border-b-0" : ""} text-[16px] outline-none`}
                                 >
                                     <span>{selected?.name}</span>
                                     {!isOpenDepartment ? (
@@ -63,11 +63,6 @@ function DepartmentSection({ control, departments, setValue }: DepartmentSelecto
                                     </div>
                                 )}
                             </div>
-                            {error && (
-                                <p className="text-red-500 text-[12px] mt-[4px]">
-                                    {error.message}
-                                </p>
-                            )}
                         </>
                     );
                 }}

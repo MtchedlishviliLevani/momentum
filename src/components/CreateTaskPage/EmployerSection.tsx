@@ -31,7 +31,7 @@ function EmployeSection({ control, employees, watch, filteredPeople }: EmployeSe
             <Controller
                 control={control}
                 name="employee_id"
-                rules={{ required: "თანამშრომლის არჩევა სავალდებულოა" }}
+                rules={{ required: true }}
                 render={({
                     field: { onChange, value },
                     fieldState: { error },
@@ -47,7 +47,7 @@ function EmployeSection({ control, employees, watch, filteredPeople }: EmployeSe
                                 onClick={toggleDropDown}
                             >
                                 <div
-                                    className={`flex justify-between items-center w-full p-[14px] border-[1px] border-[#CED4DA] rounded-[6px] ${isOpenEmployees ? "rounded-b-none border-b-0" : ""
+                                    className={`${error && "border-[#FA4D4D]"} flex justify-between items-center w-full p-[14px] border-[1px] border-[#CED4DA] rounded-[6px] ${isOpenEmployees ? "rounded-b-none border-b-0" : ""
                                         } text-[16px] outline-none`}
                                 >
                                     {selected && (
@@ -74,10 +74,10 @@ function EmployeSection({ control, employees, watch, filteredPeople }: EmployeSe
                                 </div>
 
                                 {isOpenEmployees && (
-                                    <div className="absolute left-0 w-full border border-[#CED4DA] bg-white z-10">
+                                    <div className="absolute left-0 w-full border border-[#CED4DA] bg-white z-10 rounded-b-[6px]">
                                         <button onClick={openModal} className='flex items-center gap-[5px] py-[9px] px-[14px]'><AddEmploy /></button>
 
-                                        {filteredPeople.length > 0 ? (
+                                        {filteredPeople.length > 0 && (
                                             filteredPeople.map((person) => (
                                                 <div key={person.id} className='px-[14px]'>
                                                     <div
@@ -103,10 +103,6 @@ function EmployeSection({ control, employees, watch, filteredPeople }: EmployeSe
                                                         </div>
                                                     </div>
                                                 </div>))
-                                        ) : (
-                                            <div className="p-[14px] text-[14px] text-gray-500">
-                                                თანამშრომლები ვერ მოიძებნა
-                                            </div>
                                         )}
                                     </div>
                                 )}

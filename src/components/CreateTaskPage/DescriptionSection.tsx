@@ -29,18 +29,20 @@ function DescriptionSection({ register, watch, errors }: DescriptionSectionProps
                     },
                 })}
             />
-            <div className="mt-[3px]">
-                <ValidationIndicator
-                    isValid={descriptionValue.trim().split(/\s+/).filter(Boolean).length >= 4}
-                    hasValue={descriptionValue.length > 0}
-                    label="მინიმუმ 4 სიმბოლო"
-                />
-                <ValidationIndicator
-                    isValid={descriptionValue.length <= 255}
-                    hasValue={descriptionValue.length > 0}
-                    label="მაქსიმუმ 255 სიმბოლო"
-                />
-            </div>
+            {descriptionValue.length > 0 &&
+                <div className="mt-[3px]">
+                    <ValidationIndicator
+                        isValid={descriptionValue.trim().split(/\s+/).filter(Boolean).length >= 4}
+                        hasValue={descriptionValue.length > 0}
+                        label="მინიმუმ 4 სიმბოლო"
+                    />
+                    <ValidationIndicator
+                        isValid={descriptionValue.length <= 255}
+                        hasValue={descriptionValue.length > 0}
+                        label="მაქსიმუმ 255 სიმბოლო"
+                    />
+                </div>
+            }
         </>
     )
 }

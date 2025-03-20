@@ -40,15 +40,22 @@ function Home() {
     }, []);
     const [filteredTasks, setFilteredTasks] = useState<Task[]>([]);
 
-
+    const [loading, setLoading] = useState(true)
     useEffect(() => {
+        const loadData = async () => {
+            setLoading(true);
+            await Promise.all([
+                fetchStatuses(),
+                fetchTasks(),
+                fetchDepartments(),
+                fetchEmployees(),
+                fetchPriorities(),
+            ]);
 
+            setLoading(false);
+        };
 
-        fetchStatuses();
-        fetchTasks();
-        fetchDepartments();
-        fetchEmployees();
-        fetchPriorities();
+        loadData();
     }, [fetchStatuses, fetchTasks, fetchDepartments, fetchEmployees, fetchPriorities]);
 
     // Filter logic: combine all active filters
@@ -90,6 +97,13 @@ function Home() {
             priorities: [],
             employees: []
         })
+    }
+
+    if (loading) {
+        return <div className="flex justify-center items-center h-screen">
+            <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+        </div>
+
     }
     return (
         <div>

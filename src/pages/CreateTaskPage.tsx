@@ -99,8 +99,6 @@ function CreateTaskPage() {
             localStorage.removeItem("create-task-values");
             reset();
             navigate("/")
-
-            console.log(payload)
         } catch (error) {
             console.error(error);
         }

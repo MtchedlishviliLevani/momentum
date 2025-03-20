@@ -53,7 +53,7 @@ const DateTimePicker = ({ value = '', onChange }: DateTimePickerProps) => {
         if (selectedDate) {
             const formattedDate = formatDate(selectedDate);
             setInputValue(formattedDate);
-            onChange?.(formattedDate); // tell react-hook-form about the new value!
+            onChange?.(formattedDate);
         }
         setShowCalendar(false);
     };
@@ -99,7 +99,6 @@ const DateTimePicker = ({ value = '', onChange }: DateTimePickerProps) => {
             setValidationStates("Validated");
         }
 
-        // Notify parent components (optional)
         onChange?.(newValue);
     };
 
