@@ -2,10 +2,7 @@
 import axios from "axios";
 
 const URL = "https://momentum.redberryinternship.ge/api/";
-// const API_TOKEN = "9e6a67c9-72bb-44fb-8fcc-65b4c965ded8";
-
-// fake one
-const API_TOKEN = "9e78b868-8691-4ac1-a07b-fca1b8e1c5f2";
+const API_TOKEN = "9e6a67c9-72bb-44fb-8fcc-65b4c965ded8";
 
 const api = axios.create({
   baseURL: URL,
