@@ -40,7 +40,6 @@ export const useTaskStore = create<TaskStore>((set) => ({
   updateTaskStatus: async (taskId, statusId, statusName) => {
     try {
       await changeStatus(taskId, statusId);
-      // Update local state
       set((state) => ({
         tasks: state.tasks.map((task) =>
           task.id === taskId
