@@ -7,6 +7,7 @@ import TextInput from '../UI/TextInput';
 import AvatarUpload from './AvatarUploader';
 import { removeStorage } from '../../utils/storeInStorage';
 import { useEmployee } from '../../hooks/useEmployees';
+import { base64ToBlob } from '../../utils/baseToBlob';
 
 function CreateEmployee({ onCloseModal }: { onCloseModal: () => void }) {
   const departments = useDepartmentStore((state) => state.departments);
@@ -21,23 +22,27 @@ function CreateEmployee({ onCloseModal }: { onCloseModal: () => void }) {
     handleSubmit,
     control,
     reset,
-    formState: { errors },
+    formState: { errors, },
     watch,
+    setError,
     setValue
   } = useForm<FormDataValues>({
     mode: "onChange",
     defaultValues: {
       name: "",
       surname: "",
+      department_id: null
     }
   });
+
 
   const [nameValue, surnameValue, departmentValue] = watch(["name", "surname", "department_id"]);
 
   useEffect(() => {
     const savedName = localStorage.getItem("name");
     const savedSurname = localStorage.getItem("surname");
-    const savedDepartment_id = localStorage.getItem("department_id")
+    const savedDepartment_id = localStorage.getItem("department_id");
+
     if (savedName) {
       setValue("name", savedName);
     }
@@ -45,17 +50,24 @@ function CreateEmployee({ onCloseModal }: { onCloseModal: () => void }) {
       setValue("surname", savedSurname);
     }
     if (savedDepartment_id) {
-      setValue("department_id", savedDepartment_id)
+      const parsedId = parseInt(savedDepartment_id, 10);
+      if (!isNaN(parsedId)) {
+        setValue("department_id", parsedId);
+      }
     }
   }, [setValue]);
 
 
   useEffect(() => {
-    localStorage.setItem("name", nameValue);
-    localStorage.setItem("surname", surnameValue);
-    localStorage.setItem("department_id", departmentValue);
-  }, [nameValue, surnameValue, departmentValue]);
+    localStorage.setItem("name", nameValue || "");
+    localStorage.setItem("surname", surnameValue || "");
 
+    if (departmentValue != null) {
+      localStorage.setItem("department_id", departmentValue.toString());
+    } else {
+      localStorage.removeItem("department_id");
+    }
+  }, [nameValue, surnameValue, departmentValue]);
 
   const validateField = (value: string) => ({
     isMinLength: value && value.length >= 2,
@@ -80,38 +92,39 @@ function CreateEmployee({ onCloseModal }: { onCloseModal: () => void }) {
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('surname', data.surname);
-    formData.append('department_id', data.department_id);
-    const avatarFile = data.avatar?.[0]; // uploaded in current session
-
-    if (!avatarFile) {
-      return alert("ავატარის ატვირთვა აუცილებელია");
+    if (data.department_id) {
+      formData.append('department_id', data.department_id.toString());
     }
+    const avatar1: string | null = localStorage.getItem("avatar");
+    if (!avatar1) {
+      setError("avatar", { type: "manual" }, { shouldFocus: true });
+      return;
 
-    if (avatarFile.size > 600 * 1024) {
-      return
     }
-
-    formData.append('avatar', avatarFile);
-
     try {
-      await createEmployee(formData)
-      onCloseModal()
+      const blob = base64ToBlob(avatar1);
+      const maxSizeInBytes = 600 * 1024;
+      if (blob.size > maxSizeInBytes) {
+        setError("avatar", { type: "manual" }, { shouldFocus: true });
+        return;
+      }
+      formData.append("avatar", blob, "avatar.jpg");
+      await createEmployee(formData);
+      onCloseModal();
       removeStorage("avatar");
       removeStorage("name");
       removeStorage("surname");
-      removeStorage("department_id")
+      removeStorage("department_id");
       reset();
     } catch (error) {
-      throw new Error(error instanceof Error ? error.message : String(error))
+      throw new Error(error instanceof Error ? error.message : String(error));
     }
   };
   return (
     <div className='mt-[37px]'>
       <h2 className='text-center text-[32px] font-[500] text-[#343a40]'>თანამშრომლის დამატება</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="grid-cols-2 grid gap-[45px] space-y-4 mt-[45px]">
-        {/* Name Field */}
         <div className="flex flex-col col-span-1">
-
           <label htmlFor="name" className="block text-[14px] font-medium mb-[2px] text-[#343a40]">
             სახელი*
           </label>
@@ -191,14 +204,14 @@ function CreateEmployee({ onCloseModal }: { onCloseModal: () => void }) {
           <Controller
             control={control}
             name="department_id"
-            rules={{ required: 'დეპარტამენტის არჩევა სავალდებულოა' }}
-            defaultValue=""
+            rules={{ required: true }}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <>
                 <div className="relative w-full cursor-pointer" onClick={toggleDropdown}>
                   <div
-                    className={`flex justify-between items-center w-full p-[14px] border-[1px] border-[#CED4DA] rounded-[6px] ${isOpen ? 'rounded-b-none border-b-0' : ''} text-[16px] outline-none`}
-                  >
+                    className={`flex justify-between items-center w-full p-[14px] border-[1px] rounded-[6px] ${isOpen ? 'rounded-b-none border-b-0' : ''
+                      } text-[16px] outline-none ${error ? 'border-[#FA4D4D]' : 'border-[#CED4DA]'
+                      }`}>
                     <span>{departments.find((d) => d.id === Number(value))?.name || 'აირჩიეთ დეპარტამენტი'}</span>
                     {!isOpen ? (
                       <img src="/svg/arrow-down.svg" alt="arrow down" />
@@ -225,7 +238,6 @@ function CreateEmployee({ onCloseModal }: { onCloseModal: () => void }) {
                     </div>
                   )}
                 </div>
-                {error && <p className="text-red-500 text-[12px] mt-[4px]">{error.message}</p>}
               </>
             )}
           />

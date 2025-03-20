@@ -16,7 +16,6 @@ const AvatarUpload: React.FC<AvatarUploadProps> = ({
 }) => {
     const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
-    // Fix the typing when accessing the file
     const watchedValue = watch(fieldName);
     const avatarFile = watchedValue instanceof FileList ? watchedValue[0] : null;
 
@@ -27,6 +26,9 @@ const AvatarUpload: React.FC<AvatarUploadProps> = ({
         }
     }, [fieldName]);
 
+
+
+    /// here image tranfrom to base64 format and store in local storage
     useEffect(() => {
         if (avatarFile && avatarFile instanceof File) {
             saveAvatarToStorage(fieldName, avatarFile)
@@ -44,23 +46,22 @@ const AvatarUpload: React.FC<AvatarUploadProps> = ({
     };
 
     const handleDelete = (e: React.MouseEvent) => {
-        e.stopPropagation(); // Prevent triggering file input click
+        e.stopPropagation();
         setAvatarPreview(null);
-        setValue(fieldName, null); // Reset form value
+        setValue(fieldName, null);
         removeStorage(fieldName);
 
         if (fileInputRef.current) {
-            fileInputRef.current.value = ''; // Reset file input manually
+            fileInputRef.current.value = '';
         }
     };
-
-
     return (
         <div className='col-span-2'>
             <label htmlFor="" className='text-[14px] font-[500] mb-[2px] text-[#343a40]'>{label}</label>
             <div
                 onClick={handleDivClick}
-                className="w-full h-[120px] rounded-[8px] border-[1px] border-dashed border-[#CED4DA] flex justify-center items-center cursor-pointer overflow-hidden"
+                className={`w-full h-[120px] rounded-[8px] border-[1px] border-dashed border-[#CED4DA] flex
+                 justify-center items-center ${errors["avatar"] && "border-[#FA4D4D]"} cursor-pointer overflow-hidden`}
             >
                 {avatarPreview ? (
                     <div className='relative'>
@@ -86,15 +87,15 @@ const AvatarUpload: React.FC<AvatarUploadProps> = ({
                     required: true,
                     validate: {
                         requiredIfNoPreview: (files: FileList) => {
-                            if (avatarPreview) return true; // There's a preview already, so skip "required"
+                            if (avatarPreview) return true;
                             const file = files?.[0];
                             return file ? true : "ფაილი აუცილებელია";
                         },
                         fileSize: (files: FileList) => {
                             const file = files?.[0];
-                            if (!file) return true; // no file selected
+                            if (!file) return true;
                             const maxSizeInBytes = 600 * 1024;
-                            return file.size <= maxSizeInBytes || "ფაილის ზომა უნდა იყოს მაქსიმუმ 600KB";
+                            return file.size <= maxSizeInBytes;
                         },
 
                     }
@@ -106,11 +107,7 @@ const AvatarUpload: React.FC<AvatarUploadProps> = ({
                 }}
                 className="hidden"
             />}
-            {errors?.[fieldName] && (
-                <p className="text-[#FA4D4D] text-sm mt-1">
-                    {errors[fieldName].message as string}
-                </p>
-            )}
+
         </div>
     );
 };
