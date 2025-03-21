@@ -76,8 +76,8 @@ function CreateEmployee({ onCloseModal }: { onCloseModal: () => void }) {
   });
 
   // Validations
-  const nameValidation = validateField(nameValue);
-  const surnameValidation = validateField(surnameValue);
+  const nameValidation = validateField(nameValue.trim())
+  const surnameValidation = validateField(surnameValue.trim());
 
   // Departments 
   const [isOpen, setIsOpen] = useState(false);

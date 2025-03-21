@@ -9,7 +9,7 @@ interface DescriptionSectionProps {
     errors: FieldErrors<UseFormValues>;
 }
 function DescriptionSection({ register, watch, errors }: DescriptionSectionProps) {
-    const descriptionValue = watch("description")
+    const descriptionValue = watch("description")?.trim() || ""
     return (
         <>
             <label

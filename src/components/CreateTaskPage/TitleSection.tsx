@@ -3,8 +3,7 @@ import ValidationIndicator from "../CreateEmployee/ValidationIndicator";
 
 
 function TitleSection({ register, watch }: TitleSectionProps) {
-    const nameValue = watch("name");
-
+    const nameValue = watch("name")?.trim() || "";
     return (
         <>
             <label
@@ -21,9 +20,12 @@ function TitleSection({ register, watch }: TitleSectionProps) {
                     required: "Required",
                     minLength: { value: 3, },
                     maxLength: { value: 255 },
+
                 }}
+
                 isMinLength={nameValue.length >= 3}
                 hasValue={nameValue.length}
+
             />
             <div className="mt-[3px]">
                 <ValidationIndicator
